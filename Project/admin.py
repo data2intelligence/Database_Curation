@@ -28,7 +28,7 @@ admin.site.register(TaskUpload, TaskUploadAdmin)
 
 
 class Association_Project_Dataset_Admin(admin.ModelAdmin):
-    list_display = ('project', 'dataset')
+    list_display = ('project', 'dataset', 'active')
     ordering = ('project',)
 
     search_fields = ('project__ID', 'project__title', 'dataset__ID', 'dataset__title')

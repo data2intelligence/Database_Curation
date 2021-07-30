@@ -78,13 +78,15 @@ def dataset_table(request):
             "success_url": "/curation/summary",
             })
     
-    
-    if flag_owner:
-        # project owner can always see all data
-        associations = Association_Project_Dataset.objects.filter(project=project, dataset__status = 'Regular', active=True)
-    else:
+    # project owner can always see all data    
+    associations = Association_Project_Dataset.objects.filter(project=project, dataset__status = 'Regular', active=True)
+
+    if not flag_owner:
+        #Active dataset
+        included = set([asso.dataset.ID for asso in associations])
+        
         # a regular curator can only see curation tasks assigned
-        associations = Curation.objects.filter(curator = request.user, project=project, dataset__status = 'Regular', active=True)
+        associations = Curation.objects.filter(curator = request.user, project=project, dataset__status = 'Regular', dataset__ID__in = included, active=True)
     
     
     if project.processed_filter:
